@@ -25,21 +25,18 @@ const confessionSchema = new Schema<ConfessionDocument>(
       {
         type: Schema.Types.ObjectId,
         ref: "User",
-        unique: true,
       },
     ],
     likes: [
       {
         type: Schema.Types.ObjectId,
         ref: "User",
-        unique: true,
       },
     ],
     dislikes: [
       {
         type: Schema.Types.ObjectId,
         ref: "User",
-        unique: true,
       },
     ],
     categories: [
