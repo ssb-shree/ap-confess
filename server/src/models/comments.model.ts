@@ -2,10 +2,10 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface CommentDocument extends Document {
   message: string;
-  user: Schema.Types.ObjectId;
-  likes: Schema.Types.ObjectId[];
-  dislikes: Schema.Types.ObjectId[];
-  confession: Schema.Types.ObjectId;
+  user: Schema.Types.ObjectId; // ID of user who wrote this comment
+  likes: Schema.Types.ObjectId[]; //ID of users who liked this comment
+  dislikes: Schema.Types.ObjectId[]; //ID of users who disliked this comment
+  confession: Schema.Types.ObjectId; // ID of confession this comment was made on
 }
 
 const commentSchema = new Schema(

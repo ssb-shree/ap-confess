@@ -4,15 +4,19 @@ export interface ConfessionDocument extends Document {
   writerID: Schema.Types.ObjectId;
   title: string;
   body: string;
-  views: Schema.Types.ObjectId[];
-  likes: Schema.Types.ObjectId[];
-  dislikes: Schema.Types.ObjectId[];
-  comments: Schema.Types.ObjectId[];
+  views: Schema.Types.ObjectId[]; // userID of people who get this specific confession
+  likes: Schema.Types.ObjectId[]; // userID of people who liked this confession
+  dislikes: Schema.Types.ObjectId[]; // userID of people who disliked this confession
+  comments: Schema.Types.ObjectId[]; // ID of comments on this confession
   categories: string[];
 }
 
 const confessionSchema = new Schema<ConfessionDocument>(
   {
+    writerID: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
     title: {
       type: String,
       required: true,
@@ -39,12 +43,19 @@ const confessionSchema = new Schema<ConfessionDocument>(
         ref: "User",
       },
     ],
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Comment",
+        default: [],
+      },
+    ],
     categories: [
       {
         type: String,
         required: true,
-        min: 5,
-        max: 20,
+        minLength: 2,
+        maxLength: 20,
       },
     ],
   },

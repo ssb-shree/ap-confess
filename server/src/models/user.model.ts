@@ -4,10 +4,10 @@ import { comparePassword, hashPassword } from "../utils/bcrypt";
 export interface UserDocument extends mongoose.Document {
   username: string;
   password: string;
-  confessions: Schema.Types.ObjectId[];
-  likes: Schema.Types.ObjectId[];
-  dislikes: Schema.Types.ObjectId[];
-  comments: Schema.Types.ObjectId[];
+  confessions: Schema.Types.ObjectId[]; // confessions written by the user
+  likes: Schema.Types.ObjectId[]; // confessions user liked
+  dislikes: Schema.Types.ObjectId[]; // confessions user disliked
+  comments: Schema.Types.ObjectId[]; // comments written by the user
   comparePassword(value: string): Promise<boolean>;
 }
 
@@ -26,24 +26,28 @@ const userSchema = new Schema<UserDocument>(
       {
         type: Schema.Types.ObjectId,
         ref: "Confession",
+        default: [],
       },
     ],
     likes: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Confession",
+        default: [],
       },
     ],
     dislikes: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Confession",
+        default: [],
       },
     ],
     comments: [
       {
         type: Schema.Types.ObjectId,
         ref: "Comment",
+        default: [],
       },
     ],
   },
