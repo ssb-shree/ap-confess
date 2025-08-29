@@ -26,4 +26,11 @@ app.use(
   )
 );
 
+import UserRouter from "./routes/user.routes";
+import { errorHandler } from "./middlewares/errorHandler";
+
+app.use("/auth", UserRouter);
+
+app.use(errorHandler);
+
 export default app;
