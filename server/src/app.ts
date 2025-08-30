@@ -26,10 +26,17 @@ app.use(
   )
 );
 
-import UserRouter from "./routes/user.routes";
 import { errorHandler } from "./middlewares/errorHandler";
 
+import UserRouter from "./routes/auth.routes";
+import ConfessRouter from "./routes/confession.routes";
+import CommentRouter from "./routes/comment.routes";
+
 app.use("/auth", UserRouter);
+
+app.use("/confess", ConfessRouter);
+
+app.use("/comments", CommentRouter);
 
 app.use(errorHandler);
 
