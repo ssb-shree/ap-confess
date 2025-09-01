@@ -35,7 +35,7 @@ export default function Register() {
 
   const [registerData, setRegisterData] = useState<registerDataType>({
     username: `user${nanoID()}`,
-  password: "",
+    password: "",
     confirmPassword: "",
   });
 
@@ -63,6 +63,8 @@ export default function Register() {
         setUserData({ username, password, confessions, likes, dislikes, comments });
         setAuth(true);
       }
+
+      router.push("/profile");
     } catch (error: any) {
       if (error instanceof ZodError) {
         error.issues.map((item) => {
