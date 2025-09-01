@@ -4,6 +4,7 @@ import Navbar from "@/myComponents/Navbar";
 
 import { Comic_Relief } from "next/font/google";
 import CheckAuth from "@/myComponents/hoc/CheckAuth";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,6 +26,16 @@ export default function RootLayout({
 }>) {
   return (
     <html data-theme="coffee" lang="en" suppressHydrationWarning>
+      {/* Google Analytics */}
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-MPXQSDP7VZ" strategy="afterInteractive" />
+      <Script id="ga" strategy="afterInteractive">
+        {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-MPXQSDP7VZ');
+          `}
+      </Script>
       <body className={`${comicRelif.className} scroll-smooth overflow-x-hidden`}>
         <main>
           <CheckAuth>
