@@ -13,7 +13,8 @@ export interface AuthenticatedRequest extends Request {
 }
 
 export const checkAuth = asyncHandler(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  const token = req.cookies.jwt as string | undefined;
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
   if (!token) throw new ApiError(UNAUTHORIZED, "unauthorized to perform this action");
 
   const decodedPayload = jwt.verify(token, process.env.JWT_SECRET!);

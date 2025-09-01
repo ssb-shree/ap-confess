@@ -25,14 +25,14 @@ const registerController = asyncHandler(async (req: Request, res: Response) => {
 
   // set token
   res.cookie("jwt", token, {
-    httpOnly: true, // can't be accessed by JS
+    httpOnly: false, // can't be accessed by JS
     secure: true, // must be true in HTTPS prod
-    sameSite: "none", // cross-site for prod
+    sameSite: "lax", // cross-site for prod
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
   });
 
   // final response
-  res.status(OK).json({ message: "user created successfully", user, success: true });
+  res.status(OK).json({ message: "user created successfully", user, success: true, token });
 });
 
 const loginController = asyncHandler(async (req: Request, res: Response) => {
@@ -54,13 +54,13 @@ const loginController = asyncHandler(async (req: Request, res: Response) => {
 
   // set token
   res.cookie("jwt", token, {
-    httpOnly: true, // can't be accessed by JS
+    httpOnly: false, // can't be accessed by JS
     secure: true, // must be true in HTTPS prod
-    sameSite: "none", // cross-site for prod
+    sameSite: "lax", // cross-site for prod
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
   });
 
-  res.status(OK).json({ message: "user logged in", userExist, success: true });
+  res.status(OK).json({ message: "user logged in", userExist, success: true, token });
 });
 
 const getUserAuthenticated = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
