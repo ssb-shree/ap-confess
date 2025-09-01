@@ -58,12 +58,6 @@ const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState<string>("confessions");
 
   useEffect(() => {
-    if (!isAuth) {
-      router.push("/auth/login");
-    }
-  }, [isAuth, router]);
-
-  useEffect(() => {
     const getProfileData = async () => {
       if (typeof window === "undefined") return;
       try {

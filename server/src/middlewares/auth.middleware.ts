@@ -15,7 +15,7 @@ export interface AuthenticatedRequest extends Request {
 export const checkAuth = asyncHandler(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-  if (!token) throw new ApiError(UNAUTHORIZED, "unauthorized to perform this action");
+  if (!token) throw new ApiError(UNAUTHORIZED, "unauthorized no token provided");
 
   const decodedPayload = jwt.verify(token, process.env.JWT_SECRET!);
   if (!decodedPayload) throw new ApiError(BAD_REQUEST, "invalid token");
