@@ -22,6 +22,6 @@ router.get("/new", getAllNewConfessionsController);
 router.get("/best", getAllBestConfessionsController);
 router.get("/trending", getAllTrendingConfessionsController);
 
-router.get("/:confessionID", checkAuth, getConfessionByIDController);
+router.get("/:confessionID", getConfessionByIDController);
 
 export default router;
