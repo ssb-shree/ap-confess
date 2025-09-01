@@ -16,7 +16,9 @@ import { AxiosResponse } from "axios";
 
 type content = {
   _id: string;
-  title: string;
+  title?: string;
+  message?: string;
+  confessionID?: string;
 };
 
 export type ProfileData = {
@@ -35,7 +37,7 @@ const ProfilePage = () => {
 
   const tabHeadings: Record<string, string> = {
     confessions: "Confessions you wrote",
-    comments: "Your comments on confessions",
+    comments: "Your comments, click to see confession",
     likes: "Your liked confessions",
     dislikes: "Your disliked confessions",
   };
@@ -143,7 +145,18 @@ const ProfilePage = () => {
                   transition={{ delay: i * 0.07, type: "spring", stiffness: 300 }}
                   className="card bg-base-200 shadow"
                 >
-                  <div className="card-body p-4 text-sm">{c.title}</div>
+                  <div
+                    onClick={() => {
+                      if (activeTab == "comments") {
+                        router.push(`/confession/${c.confessionID}`);
+                      } else {
+                        router.push(`/confession/${c._id}`);
+                      }
+                    }}
+                    className="card-body p-4 text-sm"
+                  >
+                    {activeTab === "comments" ? c.message : c.title}
+                  </div>
                 </motion.div>
               ))}
             </motion.div>

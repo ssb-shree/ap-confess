@@ -30,6 +30,7 @@ import AuthRouter from "./routes/auth.routes";
 import UserRouter from "./routes/user.routes";
 import ConfessRouter from "./routes/confession.routes";
 import CommentRouter from "./routes/comment.routes";
+import ReportRouter from "./routes/report.routes";
 
 app.use("/auth", AuthRouter);
 
@@ -38,6 +39,8 @@ app.use("/user", UserRouter);
 app.use("/confess", ConfessRouter);
 
 app.use("/comments", CommentRouter);
+
+app.use("/report", ReportRouter);
 
 app.use(errorHandler);
 

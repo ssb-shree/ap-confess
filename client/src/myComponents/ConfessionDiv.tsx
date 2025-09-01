@@ -81,7 +81,7 @@ const ConfessionDiv = ({ data }: { data: Confession }) => {
         <button onClick={() => router.push(`/confession/${data._id}`)} className="btn btn-sm md:btn-md btn-ghost">
           💬 Comment
         </button>
-        <button onClick={() => alert("working on report")} className="btn btn-sm md:btn-md btn-ghost">
+        <button onClick={() => router.push(`/report/${data._id}`)} className="btn btn-sm md:btn-md btn-ghost">
           ⚠ Report
         </button>
       </div>

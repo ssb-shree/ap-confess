@@ -78,7 +78,7 @@ const getUserProfile = asyncHandler(async (req: AuthenticatedRequest, res: Respo
       { path: "confessions", select: "title" },
       { path: "likes", select: "title" },
       { path: "dislikes", select: "title" },
-      { path: "comments", select: "title" },
+      { path: "comments", select: "message confessionID" },
     ]);
 
   res.status(OK).json({ user });

@@ -7,7 +7,7 @@ export interface UserDocument extends mongoose.Document {
   confessions: Schema.Types.ObjectId[]; // confessions written by the user
   likes: Schema.Types.ObjectId[]; // confessions user liked
   dislikes: Schema.Types.ObjectId[]; // confessions user disliked
-  comments: Schema.Types.ObjectId[]; // comments written by the user
+  comments: Schema.Types.ObjectId[]; // commentIDs written by the user
   comparePassword(value: string): Promise<boolean>;
 }
 

@@ -1,6 +1,6 @@
 "use client";
 import axiosInstance from "@/servies/axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoIosSend } from "react-icons/io";
 import z, { ZodError } from "zod";
@@ -90,6 +90,8 @@ export default ReadConfessionpage;
 const ConfessionCard = ({ data }: { data: Confession }) => {
   const { isAuth } = useUserStore();
 
+  const router = useRouter();
+
   const [count, setCount] = useState<{ likeCount: number; dislikeCount: number }>({
     likeCount: data.likeCount,
     dislikeCount: data.dislikeCount,
@@ -151,7 +153,11 @@ const ConfessionCard = ({ data }: { data: Confession }) => {
         <button disabled={!isAuth} onClick={handleDislike} className="btn btn-sm md:btn-md btn-ghost">
           💩 dislike
         </button>
-        <button disabled={!isAuth} className="btn btn-sm md:btn-md btn-ghost">
+        <button
+          disabled={!isAuth}
+          onClick={() => router.push(`/report/${data._id}`)}
+          className="btn btn-sm md:btn-md btn-ghost"
+        >
           ⚠ Report
         </button>
       </div>
