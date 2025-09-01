@@ -175,12 +175,12 @@ export default function Register() {
             </motion.button>
           </div>
 
-          <span className="text-center">
-            Already have an Account?{"  "}
+          <div className="flex gap-x-2 items-center justify-center">
+            <span className="text-center">Already have an Account?</span>
             <Link className="underline" href={"/auth/login"}>
               Log in
             </Link>
-          </span>
+          </div>
         </div>
       </motion.div>
     </div>
