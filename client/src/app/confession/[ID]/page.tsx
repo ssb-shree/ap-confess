@@ -242,7 +242,6 @@ const Comment = ({ comment }: { comment: Comment }) => {
       );
 
       if (res.data.success) {
-        console.log(res.data);
         setCount((prev) => ({
           ...prev,
           dislikeCount: res.data.comment.dislikeCount,
@@ -250,7 +249,6 @@ const Comment = ({ comment }: { comment: Comment }) => {
         }));
       }
 
-      console.log(res.data);
     } catch (error: any) {
       console.log(error);
     }

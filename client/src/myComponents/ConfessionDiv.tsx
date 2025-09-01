@@ -29,8 +29,6 @@ const ConfessionDiv = ({ data }: { data: Confession }) => {
           likeCount: res.data.confession.likeCount,
         }));
       }
-
-      console.log(res.data);
     } catch (error: any) {
       console.log(error);
     }
@@ -50,8 +48,6 @@ const ConfessionDiv = ({ data }: { data: Confession }) => {
           likeCount: res.data.confession.likeCount,
         }));
       }
-
-      console.log(res.data);
     } catch (error: any) {
       console.log(error);
     }

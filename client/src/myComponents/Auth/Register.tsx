@@ -89,8 +89,6 @@ export default function Register() {
       }
 
       setAuth(false);
-
-      alert(error.response.data.message);
     }
   };
 

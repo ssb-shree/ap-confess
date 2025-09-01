@@ -28,7 +28,6 @@ const Rootpage = () => {
         const res : AxiosResponse = await axiosInstance.get(`/confess/${active}?skip=${5 * skip}`, { withCredentials: true });
 
         setConfessions(res.data.confessions);
-        console.log(res.data.confessions);
       } catch (error: any) {
         console.error(error.message || error);
       }

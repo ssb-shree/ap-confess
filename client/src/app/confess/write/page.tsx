@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 
 import { motion } from "framer-motion";
+import z, { ZodError } from "zod";
 
 import axiosInstance from "@/servies/axios";
 import { useRouter } from "next/navigation";
@@ -27,6 +28,12 @@ const WriteConfessionPage = () => {
   const router = useRouter();
   const { isAuth } = useUserStore();
 
+  const writeSchema = z.object({
+    title: z.string().min(3).max(250),
+    body: z.string().min(25),
+    categories: z.array(z.string().min(2).max(20)).min(3).max(20),
+  });
+
   useEffect(() => {
     if (!isAuth) {
       router.push("/");
@@ -35,14 +42,25 @@ const WriteConfessionPage = () => {
 
   const [confession, setConfession] = useState<confessionType>(initialConfessionState);
 
+  const [zError, setZError] = useState<any>({});
+
   const submitConfession = async () => {
     setDisabled(true);
     try {
-      const res: AxiosResponse = await axiosInstance.post("/confess/write", confession, { withCredentials: true });
+      const confessionRigth = writeSchema.parse(confession);
+
+      const res: AxiosResponse = await axiosInstance.post("/confess/write", confessionRigth, { withCredentials: true });
 
       router.push(`/confession/${res.data.confession._id}`);
     } catch (error: any) {
-      alert(error.message || error);
+      if (error instanceof ZodError) {
+        error.issues.map((item) => {
+          setZError((prev: any) => ({ ...prev, [item.path[0]]: item.message }));
+        });
+        return;
+      } else {
+        setZError({});
+      }
     } finally {
       setDisabled(false);
     }
@@ -70,7 +88,7 @@ const WriteConfessionPage = () => {
           {/* Title Input */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Title</span>
+              <span className="label-text">{zError.title ? zError.title : "Title"}</span>
             </label>
             <motion.input
               whileFocus={{ scale: 1.02 }}
@@ -86,7 +104,7 @@ const WriteConfessionPage = () => {
           {/* Confession Textarea */}
           <div className="form-control flex flex-col">
             <label className="label">
-              <span className="label-text">Your Confession</span>
+              <span className="label-text">{zError.body ? zError.body : "Your Cnfession"}</span>
             </label>
             <motion.textarea
               whileFocus={{ scale: 1.01 }}
@@ -101,7 +119,9 @@ const WriteConfessionPage = () => {
           {/* Categories Input */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Categories</span>
+              <span className="label-text">
+                {zError.categories ? "Minimum 3 words seprated by comma" : "Categories"}
+              </span>
             </label>
             <motion.input
               whileFocus={{ scale: 1.02 }}
