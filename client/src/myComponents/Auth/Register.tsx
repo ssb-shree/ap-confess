@@ -11,6 +11,7 @@ import axiosInstance from "@/servies/axios";
 import { useUserStore } from "@/store/user";
 
 import Cookies from "js-cookie";
+import Link from "next/link";
 
 const registerSchema = z.object({
   username: z.string().min(9).max(9),
@@ -173,6 +174,13 @@ export default function Register() {
               {takenFlag ? "Try Again" : "Register"}
             </motion.button>
           </div>
+
+          <span className="text-center">
+            Already have an Account?{"  "}
+            <Link className="underline" href={"/auth/login"}>
+              Log in
+            </Link>
+          </span>
         </div>
       </motion.div>
     </div>

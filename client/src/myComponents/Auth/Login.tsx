@@ -11,6 +11,7 @@ import Cookies from "js-cookie";
 import z, { ZodError } from "zod";
 import axiosInstance from "@/servies/axios";
 import { useUserStore } from "@/store/user";
+import Link from "next/link";
 
 const loginSchema = z.object({
   username: z.string().min(9).max(9),
@@ -133,6 +134,12 @@ export default function Login() {
               Login
             </motion.button>
           </div>
+          <span className="text-center">
+            Don't have an account?{" "}
+            <Link className="underline" href={"/auth/register"}>
+              Register
+            </Link>
+          </span>
         </div>
       </motion.div>
     </div>
