@@ -102,6 +102,12 @@ const ProfilePage = () => {
         <ThemeDropdown />
       </motion.div>
 
+      {/* Profile Header */}
+      <div>
+        <h1 className="text-3xl font-bold">@{data.username}</h1>
+        <p className="text-sm opacity-70">Member since: Jan 2025</p>
+      </div>
+
       {/* Tabs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {["confessions", "comments", "likes", "dislikes"].map((tab) => (
@@ -169,8 +175,6 @@ export default ProfilePage;
 
 function ThemeDropdown() {
   const [open, setOpen] = useState(false);
-
-  const router = useRouter();
 
   const { theme, setTheme } = useThemeStore();
 

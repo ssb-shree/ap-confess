@@ -21,15 +21,9 @@ type loginDataType = {
 };
 
 export default function Login() {
-  const { isAuth, setUserData, setAuth } = useUserStore();
+  const { setUserData, setAuth } = useUserStore();
 
   const router = useRouter();
-
-  useEffect(() => {
-    if (isAuth) {
-      router.push("/profile");
-    }
-  }, [isAuth, router]);
 
   const [loginData, setLoginData] = useState<loginDataType>({
     username: "",
@@ -55,6 +49,8 @@ export default function Login() {
         setUserData({ username, password, confessions, likes, dislikes, comments });
         setAuth(true);
       }
+
+      router.push("/profile");
     } catch (error: any) {
       if (error instanceof ZodError) {
         error.issues.map((item) => {
@@ -66,8 +62,6 @@ export default function Login() {
       }
 
       setAuth(false);
-
-      alert(error.response.data.message);
     }
   };
 
