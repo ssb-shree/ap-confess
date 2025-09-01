@@ -2,10 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-const page = () => {
+const AuthPage = () => {
   const router = useRouter();
 
-  useEffect(() => router.push("/auth/register"));
+  useEffect(() => router.push("/auth/register"), []);
   return (
     <div className="w-screen h-screen flex justify-center items-center text-3xl md:text-8xl">
       dont mess with the url kid
@@ -13,4 +13,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default AuthPage;
