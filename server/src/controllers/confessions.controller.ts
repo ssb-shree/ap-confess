@@ -1,12 +1,11 @@
 import type { Request, Response } from "express";
 import asyncHandler from "../utils/asyncHandler";
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZED } from "../constants/status-codes";
-import { mongoID, writeSchema } from "./confessions.schema";
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, UNAUTHORIZED } from "../constants/status-codes";
+import { writeSchema } from "./confessions.schema";
 import type { AuthenticatedRequest } from "../middlewares/auth.middleware";
 import ApiError from "../utils/apiError";
-import { Confession } from "../models/confessions.model";
+import { Confession, type ConfessionDocument } from "../models/confessions.model";
 import { User } from "../models/user.model";
-import { BADRESP } from "dns";
 
 import { isSpam } from "../utils/spam";
 
@@ -27,7 +26,14 @@ const writeConfession = asyncHandler(async (req: AuthenticatedRequest, res: Resp
   }
 
   // create the confession in db
-  const confession = await Confession.create({ title, body, categories, views: [userID], likes: [userID] });
+  const confession = await Confession.create({
+    title,
+    body,
+    categories,
+    views: [userID],
+    likes: [userID],
+    likeCount: 1,
+  });
 
   if (!confession) throw new ApiError(INTERNAL_SERVER_ERROR, "Failed to save to DB");
 
@@ -45,7 +51,6 @@ const writeConfession = asyncHandler(async (req: AuthenticatedRequest, res: Resp
 });
 
 //like confession
-
 const likeConfessionController = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   // get the confessionID
   const { confessionID } = req.params;
@@ -64,6 +69,12 @@ const likeConfessionController = asyncHandler(async (req: AuthenticatedRequest, 
     },
     { new: true }
   );
+
+  if (confession) {
+    confession.likeCount = confession.likes.length;
+    confession.dislikeCount = confession.dislikes.length;
+    await confession.save();
+  }
 
   await User.findByIdAndUpdate(
     userID,
@@ -96,6 +107,12 @@ const dislikeConfessionController = asyncHandler(async (req: AuthenticatedReques
     { new: true }
   );
 
+  if (confession) {
+    confession.likeCount = confession.likes.length;
+    confession.dislikeCount = confession.dislikes.length;
+    await confession.save();
+  }
+
   await User.findOneAndUpdate(
     { _id: userID },
     {
@@ -107,4 +124,122 @@ const dislikeConfessionController = asyncHandler(async (req: AuthenticatedReques
   res.status(OK).json({ message: "Disliked the Video", success: true, confession });
 });
 
-export { writeConfession, likeConfessionController, dislikeConfessionController };
+//get all newest Confessions
+const getAllNewConfessionsController = asyncHandler(async (req: Request, res: Response) => {
+  const { skip } = req.query;
+  const skipNum = Number(skip) || 0;
+  const limitNum = 8;
+
+  const confessions = await Confession.aggregate([
+    {
+      $project: {
+        _id: 1,
+        createdAt: 1,
+        body: 1,
+        likeCount: 1,
+        dislikeCount: 1,
+      },
+    },
+    { $sort: { createdAt: -1 } },
+    { $skip: skipNum },
+    { $limit: limitNum },
+  ]);
+
+  res.status(OK).json({
+    message: "Fetched newest confessions successfully",
+    success: true,
+    confessions,
+  });
+});
+
+const getAllBestConfessionsController = asyncHandler(async (req: Request, res: Response) => {
+  const { skip } = req.query;
+  const skipNum = Number(skip) || 0;
+  const limitNum = 8;
+
+  const confessions = await Confession.aggregate([
+    {
+      $project: {
+        _id: 1,
+        createdAt: 1,
+        body: 1,
+        likeCount: 1,
+        dislikeCount: 1,
+      },
+    },
+    { $sort: { likeCount: -1 } },
+    { $skip: skipNum },
+    { $limit: limitNum },
+  ]);
+
+  res.status(OK).json({
+    message: "Fetched best confessions successfully",
+    success: true,
+    confessions,
+  });
+});
+
+const getAllTrendingConfessionsController = asyncHandler(async (req: Request, res: Response) => {
+  const { skip } = req.query;
+  const skipNum = Number(skip) || 0;
+  const limitNum = 8;
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+  const confessions = await Confession.aggregate([
+    {
+      $match: { createdAt: { $gte: weekAgo } }, // last 7 days
+    },
+    {
+      $project: {
+        _id: 1,
+        createdAt: 1,
+        body: 1,
+        likeCount: 1,
+        dislikeCount: 1,
+      },
+    },
+    { $sort: { likeCount: -1, createdAt: -1 } },
+    { $skip: skipNum },
+    { $limit: limitNum },
+  ]);
+
+  res.status(OK).json({
+    message: "Fetched trending confessions successfully",
+    success: true,
+    confessions,
+  });
+});
+
+// get confession by ID
+
+const getConfessionByIDController = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.params) throw new ApiError(BAD_REQUEST, "Invalid Url");
+
+  const confession = await Confession.findById(req.params.confessionID)
+    .lean({ virtuals: true })
+    .select("writerID title body categories likeCount dislikeCount createdAt")
+    .populate([
+      {
+        path: "comments",
+        select: "message userID likeCount dislikeCount createdAt",
+        populate: {
+          path: "userID",
+          select: "username",
+        },
+      },
+    ]);
+
+  if (!confession) throw new ApiError(NOT_FOUND, "Confession Not Found");
+
+  res.status(OK).json({ message: "Confession found successfully", confession, success: true });
+});
+
+export {
+  writeConfession,
+  likeConfessionController,
+  dislikeConfessionController,
+  getAllNewConfessionsController,
+  getAllBestConfessionsController,
+  getAllTrendingConfessionsController,
+  getConfessionByIDController,
+};

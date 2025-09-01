@@ -5,7 +5,8 @@ import { loginSchema, registerSchema } from "./auth.schema";
 import ApiError from "../utils/apiError";
 
 import jwt from "jsonwebtoken";
-import { CONFLICT, OK } from "../constants/status-codes";
+import { BAD_REQUEST, CONFLICT, OK, UNAUTHORIZED } from "../constants/status-codes";
+import type { AuthenticatedRequest } from "../middlewares/auth.middleware";
 
 const registerController = asyncHandler(async (req: Request, res: Response) => {
   // let zod validate the payload
@@ -51,4 +52,25 @@ const loginController = asyncHandler(async (req: Request, res: Response) => {
   res.status(OK).json({ message: "user logged in", userExist, success: true });
 });
 
-export { registerController, loginController };
+const getUserAuthenticated = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  res.status(OK).json({ message: "user authenticated successfully", success: true });
+});
+
+const getUserProfile = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user) throw new ApiError(UNAUTHORIZED, "cant perform this action");
+
+  const { userID } = req.user;
+  const user = await User.findById(userID)
+    .lean()
+    .select("username createdAt")
+    .populate([
+      { path: "confessions", select: "title" },
+      { path: "likes", select: "title" },
+      { path: "dislikes", select: "title" },
+      { path: "comments", select: "title" },
+    ]);
+
+  res.status(OK).json({ user });
+});
+
+export { registerController, loginController, getUserAuthenticated, getUserProfile };

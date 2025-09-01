@@ -9,7 +9,6 @@ import { isSpam } from "../utils/spam";
 import { Comment } from "../models/comments.model";
 import { Confession } from "../models/confessions.model";
 import { User } from "../models/user.model";
-import { mongoID } from "./confessions.schema";
 import z from "zod";
 
 const writeCommentController = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
@@ -61,6 +60,12 @@ const likesCommentController = asyncHandler(async (req: AuthenticatedRequest, re
     { new: true }
   );
 
+  if (comment) {
+    comment.likeCount = comment.likes.length;
+    comment.dislikeCount = comment.dislikes.length;
+    await comment.save();
+  }
+
   await User.findByIdAndUpdate(
     userID,
     {
@@ -91,6 +96,12 @@ const dislikesCommentController = asyncHandler(async (req: AuthenticatedRequest,
     },
     { new: true }
   );
+
+  if (comment) {
+    comment.likeCount = comment.likes.length;
+    comment.dislikeCount = comment.dislikes.length;
+    await comment.save();
+  }
 
   await User.findOneAndUpdate(
     { _id: userID },

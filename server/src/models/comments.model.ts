@@ -8,6 +8,9 @@ export interface CommentDocument extends Document {
   likes: Schema.Types.ObjectId[]; //ID of users who liked this comment
   dislikes: Schema.Types.ObjectId[]; //ID of users who disliked this comment
   confessionID: Schema.Types.ObjectId; // ID of confession this comment was made on
+
+  likesCount: number;
+  dislikesCount: number;
 }
 
 const commentSchema = new Schema(
@@ -40,6 +43,8 @@ const commentSchema = new Schema(
         default: [],
       },
     ],
+    likeCount: { type: Number, default: 0, required: true },
+    dislikeCount: { type: Number, default: 0, required: true },
   },
   { timestamps: true }
 );

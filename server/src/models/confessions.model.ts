@@ -11,6 +11,8 @@ export interface ConfessionDocument extends Document {
   dislikes: Schema.Types.ObjectId[]; // userID of people who disliked this confession
   comments: Schema.Types.ObjectId[]; // ID of comments on this confession
   categories: string[];
+  likeCount: number;
+  dislikeCount: number;
 }
 
 const confessionSchema = new Schema<ConfessionDocument>(
@@ -45,6 +47,8 @@ const confessionSchema = new Schema<ConfessionDocument>(
         ref: "User",
       },
     ],
+    likeCount: { type: Number, default: 0, required: true },
+    dislikeCount: { type: Number, default: 0, required: true },
     comments: [
       {
         type: Schema.Types.ObjectId,

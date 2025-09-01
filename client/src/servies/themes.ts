@@ -1,0 +1,17 @@
+export const daisyThemes: string[] = [
+  "light",
+  "dark",
+  "cupcake",
+  "synthwave",
+  "retro",
+  "cyberpunk",
+  "valentine",
+  "halloween",
+  "wireframe",
+  "black",
+  "dracula",
+  "business",
+  "night",
+  "coffee",
+  "caramellatte",
+];

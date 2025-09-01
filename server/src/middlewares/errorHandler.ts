@@ -5,6 +5,7 @@ import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from "../constants/status-codes";
 import ApiError from "../utils/apiError";
 
 import { z } from "zod";
+import { JsonWebTokenError } from "jsonwebtoken";
 
 const zodErrorHandler = (res: Response, error: z.ZodError) => {
   // error.issues object has path which is field and message is the reason why parsing failed
@@ -30,6 +31,10 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
   if (err instanceof ApiError) {
     return apiErrorHandler(res, err);
+  }
+
+  if (err instanceof JsonWebTokenError) {
+    return res.status(BAD_REQUEST).json({ message: err.message, success: false });
   }
 
   res.status(INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error", success: false });
