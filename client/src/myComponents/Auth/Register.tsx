@@ -10,6 +10,8 @@ import z, { ZodError } from "zod";
 import axiosInstance from "@/servies/axios";
 import { useUserStore } from "@/store/user";
 
+import Cookies from "js-cookie";
+
 const registerSchema = z.object({
   username: z.string().min(9).max(9),
   password: z.string().min(6).max(10),
@@ -59,9 +61,12 @@ export default function Register() {
       );
 
       if (data.success) {
-        const { username, password, confessions, likes, dislikes, comments } = data;
+        const { username, password, confessions, likes, dislikes, comments } = data.user;
         setUserData({ username, password, confessions, likes, dislikes, comments });
         setAuth(true);
+        Cookies.set("jwt", data.token, {
+          expires: 1, // 1 day
+        });
       }
 
       router.push("/profile");

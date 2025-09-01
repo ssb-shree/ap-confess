@@ -6,6 +6,8 @@ import { nanoID } from "@/servies/nanaid";
 
 import { useRouter } from "next/navigation";
 
+import Cookies from "js-cookie";
+
 import z, { ZodError } from "zod";
 import axiosInstance from "@/servies/axios";
 import { useUserStore } from "@/store/user";
@@ -45,9 +47,13 @@ export default function Login() {
       const { data } = await axiosInstance.post("/auth/login", { username, password }, { withCredentials: true });
 
       if (data.success) {
-        const { username, password, confessions, likes, dislikes, comments } = data;
+        const { username, password, confessions, likes, dislikes, comments } = data.userExist;
         setUserData({ username, password, confessions, likes, dislikes, comments });
         setAuth(true);
+
+        Cookies.set("jwt", data.token, {
+          expires: 1, // 1 day
+        });
       }
 
       router.push("/profile");
