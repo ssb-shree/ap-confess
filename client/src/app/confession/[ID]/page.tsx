@@ -66,7 +66,7 @@ const ReadConfessionpage = () => {
       }
     };
     getConfession();
-  }, []);
+  }, [params]);
   return (
     data && (
       <section className="w-screen px-5 md:px-0 mt-5 overflow-x-hidden flex flex-col justify-center items-center">

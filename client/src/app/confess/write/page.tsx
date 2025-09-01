@@ -31,7 +31,7 @@ const WriteConfessionPage = () => {
     if (!isAuth) {
       router.push("/");
     }
-  }, []);
+  }, [isAuth, router]);
 
   const [confession, setConfession] = useState<confessionType>(initialConfessionState);
 

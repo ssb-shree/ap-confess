@@ -31,7 +31,7 @@ export default function Register() {
     if (isAuth) {
       router.push("/profile");
     }
-  }, [isAuth]);
+  }, [isAuth, router]);
 
   const [registerData, setRegisterData] = useState<registerDataType>({
     username: `user${nanoID()}`,

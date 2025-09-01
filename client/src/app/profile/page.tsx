@@ -61,7 +61,7 @@ const ProfilePage = () => {
     if (!isAuth) {
       router.push("/auth/login");
     }
-  }, []);
+  }, [isAuth, router]);
 
   useEffect(() => {
     const getProfileData = async () => {
@@ -89,7 +89,7 @@ const ProfilePage = () => {
     };
 
     getProfileData();
-  }, []);
+  }, [router]);
 
   if (loading) {
     return <ProfileFallback />;

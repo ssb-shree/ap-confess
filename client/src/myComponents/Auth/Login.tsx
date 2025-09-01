@@ -29,7 +29,7 @@ export default function Login() {
     if (isAuth) {
       router.push("/profile");
     }
-  }, [isAuth]);
+  }, [isAuth, router]);
 
   const [loginData, setLoginData] = useState<loginDataType>({
     username: "",
