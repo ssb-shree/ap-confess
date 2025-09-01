@@ -170,8 +170,25 @@ const ConfessionCard = ({ data }: { data: Confession }) => {
 
 const CommentInput = ({ confessionID, getNewComment }: { confessionID: string; getNewComment: any }) => {
   const { isAuth } = useUserStore();
-
   const [commentText, setCommentText] = useState<string>("");
+
+  const handleSendComment = async () => {
+    try {
+      const res: AxiosResponse = await axiosInstance.post(
+        `/comments/write/${confessionID}`,
+        { message: commentText },
+        { withCredentials: true }
+      );
+
+      getNewComment(res.data.comment);
+    } catch (error: any) {
+      console.error(error.message || error);
+      getNewComment(null);
+    } finally {
+      setCommentText("");
+    }
+  };
+
   return (
     <div className="w-full md:w-[60%] mt-3 flex items-center gap-2 p-4 bg-base-200 rounded-none shadow-md">
       <input
@@ -179,26 +196,18 @@ const CommentInput = ({ confessionID, getNewComment }: { confessionID: string; g
         placeholder="Write a comment..."
         className="input input-bordered input-sm flex-1 focus:outline-none"
         value={commentText}
+        onKeyDown={({ key }: { key: string }) => {
+          if (key == "Enter") {
+            handleSendComment();
+          }
+        }}
         onChange={(e) => setCommentText(e.target.value)}
         disabled={!isAuth}
       />
       <button
         className="btn btn-primary btn-sm rounded-lg flex items-center justify-center p-2"
         disabled={!isAuth}
-        onClick={async () => {
-          try {
-            const res: AxiosResponse = await axiosInstance.post(
-              `/comments/write/${confessionID}`,
-              { message: commentText },
-              { withCredentials: true }
-            );
-
-            getNewComment(res.data.comment);
-          } catch (error: any) {
-            console.error(error.message || error);
-            getNewComment(null);
-          }
-        }}
+        onClick={handleSendComment}
       >
         <IoIosSend size={18} />
       </button>
@@ -248,7 +257,6 @@ const Comment = ({ comment }: { comment: Comment }) => {
           likeCount: res.data.comment.likeCount,
         }));
       }
-
     } catch (error: any) {
       console.log(error);
     }

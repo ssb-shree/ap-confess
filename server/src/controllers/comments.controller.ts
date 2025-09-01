@@ -10,6 +10,7 @@ import { Comment } from "../models/comments.model";
 import { Confession } from "../models/confessions.model";
 import { User } from "../models/user.model";
 import z from "zod";
+import type { Types } from "mongoose";
 
 const writeCommentController = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   const { message } = commentSchema.parse(req.body);
@@ -34,11 +35,15 @@ const writeCommentController = asyncHandler(async (req: AuthenticatedRequest, re
   });
 
   // update the user document of the current user
-  await Confession.findByIdAndUpdate(confessionID, {
+  const user = await User.findByIdAndUpdate(userID, {
     $addToSet: { comments: comment._id },
-  });
+  }).select("username");
 
   if (!comment) throw new ApiError(INTERNAL_SERVER_ERROR, "Failed to save in DB");
+
+  // changing the userID with username
+  // @ts-ignore
+  comment._doc.userID = { username: user.username };
 
   res.status(OK).json({ message: "added comment successfully", success: true, comment });
 });
