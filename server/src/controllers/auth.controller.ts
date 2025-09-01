@@ -26,8 +26,8 @@ const registerController = asyncHandler(async (req: Request, res: Response) => {
   // set token
   res.cookie("jwt", token, {
     httpOnly: true, // can't be accessed by JS
-    secure: process.env.STATUS === "PROD", // must be true in HTTPS prod
-    sameSite: process.env.STATUS === "PROD" ? "none" : "lax", // cross-site for prod
+    secure: process.env.STATUS! === "PROD", // must be true in HTTPS prod
+    sameSite: process.env.STATUS!  === "PROD" ? "none" : "lax", // cross-site for prod
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
   });
 
@@ -55,8 +55,8 @@ const loginController = asyncHandler(async (req: Request, res: Response) => {
   // set token
   res.cookie("jwt", token, {
     httpOnly: true, // can't be accessed by JS
-    secure: process.env.STATUS === "PROD", // must be true in HTTPS prod
-    sameSite: process.env.STATUS === "PROD" ? "none" : "lax", // cross-site for prod
+    secure: process.env.STATUS! === "PROD", // must be true in HTTPS prod
+    sameSite: process.env.STATUS! === "PROD" ? "none" : "lax", // cross-site for prod
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
   });
 
