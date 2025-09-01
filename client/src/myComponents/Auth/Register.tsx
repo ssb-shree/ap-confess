@@ -35,7 +35,7 @@ export default function Register() {
 
   const [registerData, setRegisterData] = useState<registerDataType>({
     username: `user${nanoID()}`,
-    password: "",
+  password: "",
     confirmPassword: "",
   });
 

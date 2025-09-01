@@ -65,6 +65,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const getProfileData = async () => {
+      if (typeof window === "undefined") return;
       try {
         setLoading(true);
 
@@ -189,7 +190,9 @@ function ThemeDropdown() {
         whileTap={{ scale: 0.95 }}
         className="stat bg-base-200 border rounded-xl shadow cursor-pointer w-full px-4 py-1 text-left"
       >
-        <span className="capitalize">{localStorage.getItem("theme") || theme} Theme</span>
+        <span className="capitalize">
+          {(typeof window !== "undefined" ? localStorage.getItem("theme") : null) || theme} Theme
+        </span>
       </motion.button>
 
       {/* Dropdown options */}
