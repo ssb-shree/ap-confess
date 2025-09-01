@@ -2,6 +2,7 @@
 import axiosInstance from "@/servies/axios";
 import { timeAgo } from "@/servies/timesAgo";
 import { Confession } from "@/types";
+import { AxiosResponse } from "axios";
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -19,7 +20,7 @@ const ConfessionDiv = ({ data }: { data: Confession }) => {
 
   const handlelike = async () => {
     try {
-      const res = await axiosInstance.post(`/confess/like/${data._id}`, {}, { withCredentials: true });
+      const res: AxiosResponse = await axiosInstance.post(`/confess/like/${data._id}`, {}, { withCredentials: true });
 
       if (res.data.success) {
         setCount((prev) => ({
@@ -36,7 +37,11 @@ const ConfessionDiv = ({ data }: { data: Confession }) => {
   };
   const handleDislike = async () => {
     try {
-      const res = await axiosInstance.post(`/confess/dislike/${data._id}`, {}, { withCredentials: true });
+      const res: AxiosResponse = await axiosInstance.post(
+        `/confess/dislike/${data._id}`,
+        {},
+        { withCredentials: true }
+      );
 
       if (res.data.success) {
         setCount((prev) => ({

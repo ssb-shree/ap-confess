@@ -12,6 +12,7 @@ import ProfileFallback from "@/myComponents/Fallback/Profile";
 
 import { daisyThemes } from "@/servies/themes";
 import { useThemeStore } from "@/store/theme";
+import { AxiosResponse } from "axios";
 
 type content = {
   _id: string;
@@ -73,7 +74,7 @@ const ProfilePage = () => {
           return;
         }
 
-        const res = await axiosInstance.get("/user", {
+        const res: AxiosResponse = await axiosInstance.get("/user", {
           withCredentials: true,
         });
 

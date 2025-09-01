@@ -7,6 +7,7 @@ import z, { ZodError } from "zod";
 
 import { useUserStore } from "@/store/user";
 import { timeAgo } from "@/servies/timesAgo";
+import { AxiosResponse } from "axios";
 
 type Comment = {
   _id: string;
@@ -49,7 +50,7 @@ const ReadConfessionpage = () => {
       try {
         const { ID } = mongoID.parse(params);
 
-        const res = await axiosInstance.get(`/confess/${ID}`, {
+        const res: AxiosResponse = await axiosInstance.get(`/confess/${ID}`, {
           withCredentials: true,
         });
 
@@ -95,7 +96,7 @@ const ConfessionCard = ({ data }: { data: Confession }) => {
   });
   const handleLike = async () => {
     try {
-      const res = await axiosInstance.post(`/confess/like/${data._id}`, {}, { withCredentials: true });
+      const res: AxiosResponse = await axiosInstance.post(`/confess/like/${data._id}`, {}, { withCredentials: true });
 
       if (res.data.success) {
         setCount((prev) => ({
@@ -110,7 +111,11 @@ const ConfessionCard = ({ data }: { data: Confession }) => {
   };
   const handleDislike = async () => {
     try {
-      const res = await axiosInstance.post(`/confess/dislike/${data._id}`, {}, { withCredentials: true });
+      const res: AxiosResponse = await axiosInstance.post(
+        `/confess/dislike/${data._id}`,
+        {},
+        { withCredentials: true }
+      );
 
       if (res.data.success) {
         setCount((prev) => ({
@@ -182,7 +187,7 @@ const CommentInput = ({ confessionID, getNewComment }: { confessionID: string; g
         disabled={!isAuth}
         onClick={async () => {
           try {
-            const res = await axiosInstance.post(
+            const res: AxiosResponse = await axiosInstance.post(
               `/comments/write/${confessionID}`,
               { message: commentText },
               { withCredentials: true }
@@ -211,7 +216,11 @@ const Comment = ({ comment }: { comment: Comment }) => {
 
   const handleLike = async () => {
     try {
-      const res = await axiosInstance.post(`/comments/like/${comment._id}`, {}, { withCredentials: true });
+      const res: AxiosResponse = await axiosInstance.post(
+        `/comments/like/${comment._id}`,
+        {},
+        { withCredentials: true }
+      );
 
       if (res.data.success) {
         setCount((prev) => ({
@@ -226,7 +235,11 @@ const Comment = ({ comment }: { comment: Comment }) => {
   };
   const handleDislike = async () => {
     try {
-      const res = await axiosInstance.post(`/comments/dislike/${comment._id}`, {}, { withCredentials: true });
+      const res: AxiosResponse = await axiosInstance.post(
+        `/comments/dislike/${comment._id}`,
+        {},
+        { withCredentials: true }
+      );
 
       if (res.data.success) {
         console.log(res.data);

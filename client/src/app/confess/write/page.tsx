@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import axiosInstance from "@/servies/axios";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/user";
+import { AxiosResponse } from "axios";
 
 export type confessionType = {
   title: string;
@@ -37,7 +38,7 @@ const WriteConfessionPage = () => {
   const submitConfession = async () => {
     setDisabled(true);
     try {
-      const res = await axiosInstance.post("/confess/write", confession, { withCredentials: true });
+      const res: AxiosResponse = await axiosInstance.post("/confess/write", confession, { withCredentials: true });
 
       router.push(`/confession/${res.data.confession._id}`);
     } catch (error: any) {
