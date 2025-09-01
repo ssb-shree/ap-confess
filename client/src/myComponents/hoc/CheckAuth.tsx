@@ -18,7 +18,7 @@ const CheckAuth = ({ children }: { children: ReactNode }): ReactNode => {
       }
     };
     checkAuth();
-  }, []);
+  }, [isAuth]);
 
   // Load saved theme once
   useEffect(() => {

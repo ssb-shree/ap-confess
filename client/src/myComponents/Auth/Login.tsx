@@ -135,7 +135,7 @@ export default function Login() {
             </motion.button>
           </div>
           <div className="flex gap-x-4 items-center justify-center">
-            <span className="text-center">Don't have an account?</span>
+            <span className="text-center">Dont have an account?</span>
             <Link className="underline" href={"/auth/register"}>
               Register
             </Link>
