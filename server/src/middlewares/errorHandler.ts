@@ -20,7 +20,7 @@ const apiErrorHandler = (res: Response, error: ApiError) => {
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   logger.error({
     message: err.message || "Unknown Error",
-    stack: err.stack,
+    // stack: err.stack,
     path: req.path,
     method: req.method,
   });
