@@ -69,17 +69,10 @@ const ProfilePage = () => {
       try {
         setLoading(true);
 
-        const storedProfile = localStorage.getItem("profile");
-        if (storedProfile) {
-          setData(JSON.parse(storedProfile));
-          return;
-        }
-
         const res: AxiosResponse = await axiosInstance.get("/user", {
           withCredentials: true,
         });
 
-        localStorage.setItem("profile", JSON.stringify(res.data.user));
         setData(res.data.user);
       } catch (error: any) {
         console.error(error.message || error);

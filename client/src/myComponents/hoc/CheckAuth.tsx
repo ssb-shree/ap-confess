@@ -4,7 +4,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { useUserStore } from "@/store/user";
 
 const CheckAuth = ({ children }: { children: ReactNode }): ReactNode => {
-  const { setAuth } = useUserStore();
+  const { setAuth, isAuth } = useUserStore();
 
   // Check auth on mount
   useEffect(() => {
@@ -18,7 +18,7 @@ const CheckAuth = ({ children }: { children: ReactNode }): ReactNode => {
       }
     };
     checkAuth();
-  }, [setAuth]);
+  }, [isAuth]);
 
   // Load saved theme once
   useEffect(() => {
