@@ -86,14 +86,14 @@ const ConfessionDiv = ({ data }: { data: Confession }) => {
         </button>
       </div>
 
-      {/* Categories */}
+      {/* Categories
       <div className="px-4 py-2 flex flex-wrap gap-2 border-t">
-        {["uno", "dos", "tres", "char", "pach"].map((cat: string, idx: number) => (
+        {data.categories.map((cat: string, idx: number) => (
           <span key={idx} className="px-3 py-1 text-xs rounded-full bg-base-300">
             {cat}
           </span>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
