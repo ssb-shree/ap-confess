@@ -163,13 +163,6 @@ const ConfessionCard = ({ data }: { data: Confession }) => {
       </div>
 
       {/* Categories */}
-      <div className="px-4 py-2 flex flex-wrap gap-2 border-t">
-        {["uno", "dos", "tres", "char", "pach"].map((cat: string, idx: number) => (
-          <span key={idx} className="px-3 py-1 text-xs rounded-full bg-base-300 text-slate-300">
-            {cat}
-          </span>
-        ))}
-      </div>
     </div>
   );
 };
