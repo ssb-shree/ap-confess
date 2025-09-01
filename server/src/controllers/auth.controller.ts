@@ -24,7 +24,13 @@ const registerController = asyncHandler(async (req: Request, res: Response) => {
   const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET!, { expiresIn: "24hr" });
 
   // set token
-  res.cookie("jwt", token, { expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 60 * 1000) });
+  res.cookie("jwt", token, {
+  httpOnly: true, // can't be accessed by JS
+  secure: process.env.STATUS === "PROD", // must be true in HTTPS prod
+  sameSite: process.env.STATUS === "PROD" ? "none" : "lax", // cross-site for prod
+  expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+});
+
 
   // final response
   res.status(OK).json({ message: "user created successfully", user, success: true });
