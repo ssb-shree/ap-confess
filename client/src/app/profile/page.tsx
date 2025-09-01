@@ -13,6 +13,7 @@ import ProfileFallback from "@/myComponents/Fallback/Profile";
 import { daisyThemes } from "@/servies/themes";
 import { useThemeStore } from "@/store/theme";
 import { AxiosResponse } from "axios";
+import { timeAgo } from "@/servies/timesAgo";
 
 type content = {
   _id: string;
@@ -69,8 +70,9 @@ const ProfilePage = () => {
           withCredentials: true,
         });
 
-        if (!res.data.user) {
+        if (res.data.user) {
           setData(res.data.user);
+          console;
         }
       } catch (error: any) {
         console.error(error.message || error);
@@ -88,97 +90,95 @@ const ProfilePage = () => {
   }
 
   return (
-    data && (
-      <div className="max-w-3xl mx-auto p-6 space-y-6">
-        {/* Themes */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="flex flex-col justify-center items-center md:flex-row md:items-center md:justify-between gap-2 mb-4 p-4 bg-base-200 rounded-xl shadow"
-        >
-          <p className="text-xs md:text-sm text-muted md:text-right">Choose a theme. We will remember it for youx.</p>
-          <ThemeDropdown />
-        </motion.div>
+    <div className="max-w-3xl mx-auto p-6 space-y-6">
+      {/* Themes */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="flex flex-col justify-center items-center md:flex-row md:items-center md:justify-between gap-2 mb-4 p-4 bg-base-200 rounded-xl shadow"
+      >
+        <p className="text-xs md:text-sm text-muted md:text-right">Choose a theme. We will remember it for youx.</p>
+        <ThemeDropdown />
+      </motion.div>
 
-        {/* Profile Header */}
-        <div>
-          <h1 className="text-3xl font-bold">@{data.username}</h1>
-          <p className="text-sm opacity-70">Member since: Jan 2025</p>
-        </div>
-
-        {/* Tabs */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {["confessions", "comments", "likes", "dislikes"].map((tab) => (
-            <motion.button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              className={`stat bg-base-200 rounded-xl shadow cursor-pointer 
-          ${activeTab === tab ? "ring-2 ring-primary" : ""}`}
-            >
-              <div className="stat-title capitalize">{tab}</div>
-              <div className="stat-value">{data[tab].length}</div>
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Recent Section */}
-        <div className="space-y-3">
-          <h2 className="text-lg font-semibold">{tabHeadings[activeTab] ?? "Confessions you wrote"}</h2>
-
-          <AnimatePresence mode="wait">
-            {data[activeTab].length > 0 ? (
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-                className="space-y-2"
-              >
-                {data[activeTab].map((c: content, i: number) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 15, scale: 0.97 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -15, scale: 0.97 }}
-                    transition={{ delay: i * 0.07, type: "spring", stiffness: 300 }}
-                    className="card bg-base-200 shadow"
-                  >
-                    <div
-                      onClick={() => {
-                        if (activeTab == "comments") {
-                          router.push(`/confession/${c.confessionID}`);
-                        } else {
-                          router.push(`/confession/${c._id}`);
-                        }
-                      }}
-                      className="card-body p-4 text-sm"
-                    >
-                      {activeTab === "comments" ? c.message : c.title}
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            ) : (
-              <motion.p
-                key="empty"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="opacity-70"
-              >
-                No confessions yet.
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </div>
+      {/* Profile Header */}
+      <div>
+        <h1 className="text-3xl font-bold">@{data.username}</h1>
+        <p className="text-sm opacity-70">Joined : {timeAgo(data.createdAt)}</p>
       </div>
-    )
+
+      {/* Tabs */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {["confessions", "comments", "likes", "dislikes"].map((tab) => (
+          <motion.button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 400, damping: 15 }}
+            className={`stat bg-base-200 rounded-xl shadow cursor-pointer 
+          ${activeTab === tab ? "ring-2 ring-primary" : ""}`}
+          >
+            <div className="stat-title capitalize">{tab}</div>
+            <div className="stat-value">{data[tab].length}</div>
+          </motion.button>
+        ))}
+      </div>
+
+      {/* Recent Section */}
+      <div className="space-y-3">
+        <h2 className="text-lg font-semibold">{tabHeadings[activeTab] ?? "Confessions you wrote"}</h2>
+
+        <AnimatePresence mode="wait">
+          {data[activeTab].length > 0 ? (
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="space-y-2"
+            >
+              {data[activeTab].map((c: content, i: number) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 15, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -15, scale: 0.97 }}
+                  transition={{ delay: i * 0.07, type: "spring", stiffness: 300 }}
+                  className="card bg-base-200 shadow"
+                >
+                  <div
+                    onClick={() => {
+                      if (activeTab == "comments") {
+                        router.push(`/confession/${c.confessionID}`);
+                      } else {
+                        router.push(`/confession/${c._id}`);
+                      }
+                    }}
+                    className="card-body p-4 text-sm"
+                  >
+                    {activeTab === "comments" ? c.message : c.title}
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : (
+            <motion.p
+              key="empty"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="opacity-70"
+            >
+              No confessions yet.
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
   );
 };
 
