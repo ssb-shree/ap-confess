@@ -112,7 +112,7 @@ const Rootpage = () => {
       </div>
 
       {/* Pagination */}
-      <div className="join grid grid-cols-2 ">
+      <div className="join grid grid-cols-2 mt-5">
         <button onClick={() => setSkip((prev) => Math.max(prev - 1, 0))} className="join-item btn btn-outline">
           Previous page
         </button>
