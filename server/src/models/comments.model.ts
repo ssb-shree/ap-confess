@@ -49,31 +49,4 @@ const commentSchema = new Schema(
   { timestamps: true }
 );
 
-commentSchema.post("findOneAndUpdate", async function (doc: CommentDocument) {
-  if (!doc) return;
-
-  try {
-    if (doc.dislikes.length > Number(process.env.THRESHOLD_COMMENT!)) {
-      const count = doc.dislikes.length;
-
-      console.log(count, "outside if");
-      if (count > 2) {
-        console.log(count, "inside if");
-        // remove the comment from confession
-        await mongoose.model("Confession").findByIdAndUpdate(doc.confessionID, {
-          $pull: { comments: doc._id },
-        });
-        // remove the comment from user
-        await mongoose.model("User").findByIdAndUpdate(doc.userID, {
-          $pull: { comments: doc._id },
-        });
-        // delete the comment
-        await doc.deleteOne();
-      }
-    }
-  } catch (error: any) {
-    throw new ApiError(INTERNAL_SERVER_ERROR, error.message);
-  }
-});
-
 export const Comment = mongoose.model("Comment", commentSchema);

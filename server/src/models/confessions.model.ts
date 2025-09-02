@@ -68,33 +68,4 @@ const confessionSchema = new Schema<ConfessionDocument>(
   { timestamps: true }
 );
 
-confessionSchema.post("findOneAndUpdate", async function (doc: ConfessionDocument) {
-  if (!doc) return;
-
-  try {
-    if (doc.dislikes.length > Number(process.env.THRESHOLD_CONFESSION!)) {
-      const count = doc.dislikes.length;
-
-      console.log(count, "outside if");
-      if (count > 2) {
-        console.log(count, "inside if");
-        // remove all the comments on the confession
-        await mongoose.model("Comment").deleteMany({ confessionID: doc._id });
-        // remove thr confessionID from users likes Array
-        await mongoose.model("User").updateMany({ likes: doc._id }, { $pull: { likes: doc._id } });
-        // remove thr confessionID from users dislikes Array
-        await mongoose.model("User").updateMany({ dislikes: doc._id }, { $pull: { dislikes: doc._id } });
-        // remove the confessionID from users confession Array
-        await mongoose.model("User").findByIdAndUpdate(doc.writerID, {
-          $pull: { confessions: doc._id },
-        });
-        // delete the confession document
-        await doc.deleteOne();
-      }
-    }
-  } catch (error: any) {
-    throw new ApiError(INTERNAL_SERVER_ERROR, error.message);
-  }
-});
-
 export const Confession = mongoose.model<ConfessionDocument>("Confession", confessionSchema);
