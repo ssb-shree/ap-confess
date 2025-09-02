@@ -20,7 +20,7 @@ type Comment = {
 
 type Confession = {
   _id: string;
-  titile: string;
+  title: string;
   body: string;
   likeCount: number;
   dislikeCount: number;
@@ -140,8 +140,12 @@ const ConfessionCard = ({ data }: { data: Confession }) => {
         </span>
       </div>
 
+      {/* Title */}
+      <div className="px-4">
+        <h2 className="text-base text-sm md:text-xl font-semibold border-b ">{data.title}</h2>
+      </div>
       {/* Content */}
-      <div className="px-4 pb-2">
+      <div className="px-4 pb-2 mt-4">
         <p className="text-xs md:text-base leading-relaxed">{data.body}</p>
       </div>
 
