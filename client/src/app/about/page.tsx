@@ -2,6 +2,48 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 
+// app/about/layout.tsx (or about/page.tsx if you prefer directly)
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About | Ap-Confess",
+  description:
+    "Learn more about Ap-Confess — an anonymous confession platform built for open expression. Discover why it was created and how it works.",
+  keywords: [
+    "about Ap-Confess",
+    "anonymous confessions",
+    "Ap-Confess platform",
+    "safe space for confessions",
+    "confession website",
+  ],
+  openGraph: {
+    title: "About Ap-Confess",
+    description: "Learn more about Ap-Confess — an anonymous confession platform built for open expression.",
+    url: "https://yourdomain.com/about",
+    siteName: "Ap-Confess",
+    images: [
+      {
+        url: "https://yourdomain.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Ap-Confess About Page",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Ap-Confess",
+    description: "Learn more about Ap-Confess — an anonymous confession platform built for open expression.",
+    images: ["https://yourdomain.com/og-image.png"],
+    creator: "@meh-this-is-boring",
+  },
+  alternates: {
+    canonical: "https://ap-student-confessions.vercel.app/about",
+  },
+};
+
 export default function AboutPage() {
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-6">
