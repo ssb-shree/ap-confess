@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import axiosInstance from "@/servies/axios";
 import { useRouter } from "next/navigation";
+import { errorToast } from "@/servies/toast";
 
 export default function ReportPage() {
   const [reason, setReason] = useState("");
@@ -35,6 +36,7 @@ export default function ReportPage() {
       router.push("/");
     } catch (error: any) {
       setMessage(error.response?.data?.message || "Something went wrong, try again.");
+      errorToast(error.response?.data?.message || "Something went wrong, try again.");
     } finally {
       setMessage("You've Already Reported This Confession");
       setLoading(false);

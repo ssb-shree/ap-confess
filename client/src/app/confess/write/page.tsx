@@ -9,6 +9,7 @@ import axiosInstance from "@/servies/axios";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/user";
 import { AxiosResponse } from "axios";
+import { errorToast } from "@/servies/toast";
 
 export type confessionType = {
   title: string;
@@ -61,6 +62,7 @@ const WriteConfessionPage = () => {
       } else {
         setZError({});
       }
+      errorToast(error.message || "Unable to perform this action");
     } finally {
       setDisabled(false);
     }

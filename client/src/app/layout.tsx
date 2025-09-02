@@ -6,6 +6,8 @@ import { Comic_Relief } from "next/font/google";
 import CheckAuth from "@/myComponents/hoc/CheckAuth";
 import Script from "next/script";
 
+import { Toaster } from "react-hot-toast";
+
 export const metadata: Metadata = {
   title: "Ap-Confess | Anonymous Confessions App",
   description:
@@ -70,6 +72,7 @@ export default function RootLayout({
           `}
       </Script>
       <body className={`${comicRelif.className} scroll-smooth overflow-x-hidden`}>
+        <Toaster position="bottom-center" toastOptions={{ duration: 3000 }} />
         <main>
           <CheckAuth>
             <Navbar />

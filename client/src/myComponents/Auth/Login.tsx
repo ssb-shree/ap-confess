@@ -12,6 +12,7 @@ import z, { ZodError } from "zod";
 import axiosInstance from "@/servies/axios";
 import { useUserStore } from "@/store/user";
 import Link from "next/link";
+import { errorToast } from "@/servies/toast";
 
 const loginSchema = z.object({
   username: z.string().min(9).max(9),
@@ -69,6 +70,7 @@ export default function Login() {
       }
 
       setAuth(false);
+      errorToast("failed to log in")
     }
   };
 

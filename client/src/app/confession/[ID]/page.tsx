@@ -8,6 +8,7 @@ import z, { ZodError } from "zod";
 import { useUserStore } from "@/store/user";
 import { timeAgo } from "@/servies/timesAgo";
 import { AxiosResponse } from "axios";
+import { errorToast } from "@/servies/toast";
 
 type Comment = {
   _id: string;
@@ -57,11 +58,11 @@ const ReadConfessionpage = () => {
         setData(res.data.confession);
       } catch (error: any) {
         if (error instanceof ZodError) {
-          alert("invalid confessionID");
+          errorToast("invalid confession id")
           return;
         }
 
-        alert(`Uncaught Error ${error.message || error}`);
+        errorToast(error.message || "Unable to perform this action")
         console.error(error);
       }
     };
@@ -109,6 +110,7 @@ const ConfessionCard = ({ data }: { data: Confession }) => {
       }
     } catch (error: any) {
       console.log(error);
+      
     }
   };
   const handleDislike = async () => {

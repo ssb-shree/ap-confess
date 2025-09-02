@@ -12,6 +12,7 @@ import { useUserStore } from "@/store/user";
 
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { errorToast } from "@/servies/toast";
 
 const registerSchema = z.object({
   username: z.string().min(9).max(9),
@@ -90,6 +91,7 @@ export default function Register() {
       }
 
       setAuth(false);
+      errorToast("failed to register user")
     }
   };
 

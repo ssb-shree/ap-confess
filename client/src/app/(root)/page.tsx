@@ -12,6 +12,7 @@ import { Confession } from "@/types";
 import ConfessionDivFB from "@/myComponents/Fallback/ConfessionDivFB";
 import { useRouter } from "next/navigation";
 import { AxiosResponse } from "axios";
+import { errorToast } from "@/servies/toast";
 
 const Rootpage = () => {
   const [confessions, setConfessions] = useState<Confession[] | null>(null);
@@ -25,11 +26,14 @@ const Rootpage = () => {
     const getConfessions = async () => {
       setConfessions([]);
       try {
-        const res : AxiosResponse = await axiosInstance.get(`/confess/${active}?skip=${5 * skip}`, { withCredentials: true });
+        const res: AxiosResponse = await axiosInstance.get(`/confess/${active}?skip=${5 * skip}`, {
+          withCredentials: true,
+        });
 
         setConfessions(res.data.confessions);
       } catch (error: any) {
         console.error(error.message || error);
+        errorToast("failed to fetch confessions");
       }
     };
 

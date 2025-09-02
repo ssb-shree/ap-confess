@@ -1,6 +1,7 @@
 "use client";
 import axiosInstance from "@/servies/axios";
 import { timeAgo } from "@/servies/timesAgo";
+import { errorToast } from "@/servies/toast";
 import { Confession } from "@/types";
 import { AxiosResponse } from "axios";
 
@@ -31,6 +32,7 @@ const ConfessionDiv = ({ data }: { data: Confession }) => {
       }
     } catch (error: any) {
       console.log(error);
+      errorToast("login to perform this action");
     }
   };
   const handleDislike = async () => {
@@ -50,6 +52,7 @@ const ConfessionDiv = ({ data }: { data: Confession }) => {
       }
     } catch (error: any) {
       console.log(error);
+      errorToast("login to perform this action");
     }
   };
 
