@@ -15,8 +15,10 @@ import type { Types } from "mongoose";
 const writeCommentController = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
   const { message } = commentSchema.parse(req.body);
 
-  if (!req.user) throw new ApiError(UNAUTHORIZED, "unauthorized to perform this action");
+  if (!req.user || !req.user.userID) throw new ApiError(UNAUTHORIZED, "unauthorized to perform this action");
   const { userID } = req.user;
+
+  if (!userID) throw new ApiError(UNAUTHORIZED, "Bad request, userID is missing");
 
   const { confessionID } = req.params;
 
@@ -53,7 +55,7 @@ const likesCommentController = asyncHandler(async (req: AuthenticatedRequest, re
   const { commentID } = z.object({ commentID: z.string().min(1).max(25) }).parse(req.params);
 
   // get the userID
-  if (!req.user) throw new ApiError(UNAUTHORIZED, "unauthorized to perform this action");
+  if (!req.user || !req.user.userID) throw new ApiError(UNAUTHORIZED, "unauthorized to perform this action");
   const { userID } = req.user;
 
   const comment = await Comment.findByIdAndUpdate(

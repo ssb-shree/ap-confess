@@ -68,7 +68,7 @@ const getUserAuthenticated = asyncHandler(async (req: AuthenticatedRequest, res:
 });
 
 const getUserProfile = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-  if (!req.user) throw new ApiError(UNAUTHORIZED, "cant perform this action");
+  if (!req.user || !req.user.userID) throw new ApiError(UNAUTHORIZED, "cant perform this action");
 
   const { userID } = req.user;
   const user = await User.findById(userID)

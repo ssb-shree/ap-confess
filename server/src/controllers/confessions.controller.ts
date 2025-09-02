@@ -14,7 +14,7 @@ const writeConfession = asyncHandler(async (req: AuthenticatedRequest, res: Resp
   const { title, body, categories } = writeSchema.parse(req.body);
 
   // get the logged in user
-  if (!req.user) throw new ApiError(UNAUTHORIZED, "unauthorized to perform this action");
+  if (!req.user || !req.user.userID) throw new ApiError(UNAUTHORIZED, "unauthorized to perform this action");
   const { userID } = req.user;
 
   // validate to catch spam
@@ -95,7 +95,7 @@ const dislikeConfessionController = asyncHandler(async (req: AuthenticatedReques
   if (!confessionID) throw new ApiError(BAD_REQUEST, "ID not provided");
 
   // get the userID
-  if (!req.user) throw new ApiError(UNAUTHORIZED, "unauthorized to perform this action");
+  if (!req.user || !req.user.userID) throw new ApiError(UNAUTHORIZED, "unauthorized to perform this action");
   const { userID } = req.user;
 
   const confession = await Confession.findOneAndUpdate(
