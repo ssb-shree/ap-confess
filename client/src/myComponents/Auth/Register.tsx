@@ -56,6 +56,11 @@ export default function Register() {
 
       setZError({});
 
+      if (password !== confirmPassword) {
+        errorToast("passwords dont match");
+        return;
+      }
+
       const { data } = await axiosInstance.post(
         "/auth/register",
         { username, password, confirmPassword },
@@ -82,7 +87,7 @@ export default function Register() {
         setZError({});
       }
 
-      if ((error.response.data.message = "Username is taken")) {
+      if (error.response.data.message === "Username is taken") {
         setRegisterData({ ...registerData, username: `user${nanoID()}` });
         setTakenFlag(true);
         return;
@@ -91,7 +96,7 @@ export default function Register() {
       }
 
       setAuth(false);
-      errorToast("failed to register user")
+      errorToast("failed to register user");
     }
   };
 
