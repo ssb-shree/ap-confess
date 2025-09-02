@@ -1,7 +1,7 @@
 import z from "zod";
 
 const writeSchema = z.object({
-  title: z.string().min(3).max(250),
+  title: z.string().min(3),
   body: z.string().min(25),
   categories: z.array(z.string().min(2).max(20)).min(3).max(20),
 });
