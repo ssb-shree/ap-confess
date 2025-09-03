@@ -20,7 +20,10 @@ type sendMessagePayload = {
 };
 
 io.on("connection", (socket) => {
-  logger.info(`user joined with socket id ${socket.id}`);
+  socket.on("join-chat", ({ username }: { username: string }) => {
+    io.emit("user-joined", { username });
+    logger.info(`user joined with socket id ${socket.id}`);
+  });
 
   socket.on("send-message", (payload: sendMessagePayload) => {
     const { message, username } = z.object({ username: z.string().max(9), message: z.string().min(1) }).parse(payload);

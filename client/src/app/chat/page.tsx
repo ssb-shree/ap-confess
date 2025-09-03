@@ -8,6 +8,7 @@ import axiosInstance from "@/servies/axios";
 
 import { useRouter } from "next/navigation";
 import { errorToast } from "@/servies/toast";
+import toast from "react-hot-toast";
 
 type MessagePayload = {
   username: string;
@@ -65,6 +66,26 @@ const Chatpage = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!socket || !userDetails) return;
+    socket.emit("join-chat", { username: userDetails.username });
+  }, [socket, userDetails]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("user-joined", (payload) => {
+      console.log(payload.username);
+      toast.success(`${payload.username} joined the chat`, {
+        position: "top-center",
+      });
+    });
+
+    return () => {
+      socket.off("receive-message");
+    };
+  }, [socket]);
 
   useEffect(() => {
     if (!socket || !messageArray) return;
