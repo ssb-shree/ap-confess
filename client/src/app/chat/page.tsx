@@ -119,6 +119,11 @@ const Chatpage = () => {
       return;
     }
 
+    if (inputMessage.length < 2) {
+      toast.error("message is too short", { position: "top-center" });
+      return;
+    }
+
     const { username } = userDetails;
 
     socket.emit("send-message", { username, message: inputMessage });
