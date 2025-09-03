@@ -1,7 +1,7 @@
 "use client";
 
 import { io, Socket } from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { User } from "@/store/user";
 import { AxiosResponse } from "axios";
 import axiosInstance from "@/servies/axios";
@@ -24,6 +24,14 @@ const Chatpage = () => {
   const [messageArray, setMessageArray] = useState<MessagePayload[]>([]);
 
   const router = useRouter();
+
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messageArray]);
 
   useEffect(() => {
     const getProfileData = async () => {
@@ -70,10 +78,6 @@ const Chatpage = () => {
   useEffect(() => {
     if (!socket || !userDetails) return;
     socket.emit("join-chat", { username: userDetails.username });
-  }, [socket, userDetails]);
-
-  useEffect(() => {
-    if (!socket) return;
 
     socket.on("user-joined", (payload) => {
       console.log(payload.username);
@@ -82,35 +86,26 @@ const Chatpage = () => {
       });
     });
 
-    return () => {
-      socket.off("receive-message");
-    };
-  }, [socket]);
-
-  useEffect(() => {
-    if (!socket || !messageArray) return;
+    socket.on("get-chats", ({ previousMessages }: { previousMessages: MessagePayload[] }) => {
+      setMessageArray(previousMessages);
+    });
 
     socket.on("receive-message", (payload: MessagePayload) => {
       console.log(payload);
       setMessageArray((prev) => [...prev, payload]);
     });
 
-    return () => {
-      socket.off("receive-message");
-    };
-  }, [socket]);
-
-  useEffect(() => {
-    if (!socket) return;
-
     socket.on("error", (payload: { message: string }) => {
       errorToast(`${payload.message}`);
     });
 
     return () => {
+      socket.off("user-joined");
+      socket.off("get-chats");
+      socket.off("receive-message");
       socket.off("error");
     };
-  }, [socket]);
+  }, [socket, userDetails]);
 
   const handleSendMessage = () => {
     if (!socket || !userDetails) {
@@ -138,7 +133,7 @@ const Chatpage = () => {
   return (
     <section className="relative w-screen h-[calc(100vh-4rem)] bg-base-200">
       {/* Chat Body */}
-      <div className="absolute top-0 left-0 right-0 bottom-16 overflow-y-auto p-4">
+      <div ref={chatContainerRef} className="absolute top-0 left-0 right-0 bottom-16 overflow-y-auto p-4">
         {messageArray &&
           messageArray.map((payload, index) => {
             return <ChatBox key={index} isUser={payload.username === userDetails?.username} payload={payload} />;
@@ -146,7 +141,7 @@ const Chatpage = () => {
       </div>
 
       {/* Input Section */}
-      <div className="absolute bottom-0 left-0 right-0 flex flex-row gap-x-2 px-5">
+      <div className="absolute bottom-0 left-0 right-0 flex flex-row gap-x-2 px-5 mb-10 md:mb-5">
         <input
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}

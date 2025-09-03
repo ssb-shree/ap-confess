@@ -18,9 +18,11 @@ type sendMessagePayload = {
   username: string;
   message: string;
 };
+const previousMessages: sendMessagePayload[] = [];
 
 io.on("connection", (socket) => {
   socket.on("join-chat", ({ username }: { username: string }) => {
+    socket.emit("get-chats", { previousMessages });
     io.emit("user-joined", { username });
     logger.info(`user joined with socket id ${socket.id}`);
   });
@@ -33,7 +35,14 @@ io.on("connection", (socket) => {
       logger.info(`${socket.id} wrote a message`);
 
       if (message && username) {
-        io.emit("receive-message", { username, message });
+        if (previousMessages.length > 20) {
+          previousMessages.shift();
+          previousMessages.push(payload);
+        } else {
+          previousMessages.push(payload);
+        }
+
+        io.emit("receive-message", payload);
         logger.info(`${socket.id} sent a message`);
       }
     } catch (error) {
