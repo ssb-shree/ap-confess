@@ -10,7 +10,7 @@ const SearchBar = () => {
       <input
         id="input"
         type="text"
-        placeholder="Search a Confession here"
+        placeholder="Search a Confession"
         className="input text-lg w-full border-none placeholder:text-xs md:placeholder:text-lg outline-none focus:outline-none"
       />
     </div>
