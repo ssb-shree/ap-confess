@@ -13,6 +13,11 @@ import toast from "react-hot-toast";
 type MessagePayload = {
   username: string;
   message: string;
+  time: string;
+};
+
+type StatsType = {
+  activeUsers: number;
 };
 
 const Chatpage = () => {
@@ -22,6 +27,8 @@ const Chatpage = () => {
   const [inputMessage, setInputMessage] = useState<string>("");
 
   const [messageArray, setMessageArray] = useState<MessagePayload[]>([]);
+
+  const [userCount, setUserCount] = useState<number>();
 
   const router = useRouter();
 
@@ -99,6 +106,10 @@ const Chatpage = () => {
       errorToast(`${payload.message}`);
     });
 
+    socket.on("connected-users", ({ activeUsers }: { activeUsers: number }) => {
+      setUserCount(activeUsers);
+    });
+
     return () => {
       socket.off("user-joined");
       socket.off("get-chats");
@@ -132,6 +143,9 @@ const Chatpage = () => {
 
   return (
     <section className="relative w-screen h-[calc(100vh-4rem)] bg-base-200">
+      <span className="w-full text-center flex justify-center items-center gap-2 pr-10 sticky top-0">
+        Active Users: <span className="font-semibold">{userCount}</span>
+      </span>
       {/* Chat Body */}
       <div ref={chatContainerRef} className="absolute top-0 left-0 right-0 bottom-16 overflow-y-auto p-4">
         {messageArray &&
@@ -170,6 +184,7 @@ const ChatBox = ({ isUser, payload }: { isUser: boolean; payload: MessagePayload
       {/* Header with username and time */}
       <div className="chat-header flex items-center gap-2">
         <span className="font-semibold">{payload.username}</span>
+        <span className="text-xs mr-2">{payload?.time}</span>
       </div>
 
       {/* Message bubble */}

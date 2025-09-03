@@ -17,14 +17,19 @@ const io = new Server(server, {
 type sendMessagePayload = {
   username: string;
   message: string;
+  time?: string;
 };
 const previousMessages: sendMessagePayload[] = [];
 
 io.on("connection", (socket) => {
   socket.on("join-chat", ({ username }: { username: string }) => {
     socket.emit("get-chats", { previousMessages });
+
     io.emit("user-joined", { username });
+
     logger.info(`user joined with socket id ${socket.id}`);
+
+    io.emit("connected-users", { activeUsers: io.sockets.sockets.size });
   });
 
   socket.on("send-message", async (payload: sendMessagePayload) => {
@@ -34,6 +39,7 @@ io.on("connection", (socket) => {
         .parse(payload);
       logger.info(`${socket.id} wrote a message`);
 
+      payload.time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
       if (message && username) {
         if (previousMessages.length > 20) {
           previousMessages.shift();
@@ -48,5 +54,9 @@ io.on("connection", (socket) => {
     } catch (error) {
       socket.emit("error", { message: "failed to send a message" });
     }
+  });
+
+  socket.on("disconnect", () => {
+    io.emit("connected-users", { activeUsers: io.sockets.sockets.size });
   });
 });
