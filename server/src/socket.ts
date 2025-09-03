@@ -3,6 +3,7 @@ import http from "http";
 
 import app from "./app";
 import z from "zod";
+import logger from "./utils/logger";
 
 export const server = http.createServer(app);
 
@@ -19,13 +20,15 @@ type sendMessagePayload = {
 };
 
 io.on("connection", (socket) => {
-  console.log(`user joined with socket id ${socket.id}`);
+  logger.info(`user joined with socket id ${socket.id}`);
 
   socket.on("send-message", (payload: sendMessagePayload) => {
     const { message, username } = z.object({ username: z.string().max(9), message: z.string().min(1) }).parse(payload);
+    logger.info(`${socket.id} wrote a message`);
 
     if (message && username) {
       io.emit("receive-message", { username, message });
+      logger.info(`${socket.id} sent a message`);
     } else {
       socket.emit("error", { message: "failed to send a message" });
     }
