@@ -31,7 +31,7 @@ const Navbar = () => {
         className={`${shrikhand.className} text-nowrap cursor-pointer`}
         onClick={() => router.push("/")}
       >
-        AP confess
+        confess
       </motion.div>
 
       {/* Search + User */}

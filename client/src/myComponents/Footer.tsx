@@ -36,7 +36,7 @@ const Footer = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="flex flex-col items-center text-center"
         >
-          <h1 className={`${shrikhand.className} text-nowrap cursor-pointer text-2xl md:text-4xl`}>AP Confess</h1>
+          <h1 className={`${shrikhand.className} text-nowrap cursor-pointer text-2xl md:text-4xl`}>Confess</h1>
           <p className="text-sm opacity-70 mt-1">Anonymous & Honest Confessions</p>
         </motion.div>
 
