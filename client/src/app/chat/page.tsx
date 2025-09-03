@@ -127,6 +127,8 @@ const Chatpage = () => {
     const { username } = userDetails;
 
     socket.emit("send-message", { username, message: inputMessage });
+
+    setInputMessage("");
   };
 
   if (!socket) {
@@ -151,7 +153,6 @@ const Chatpage = () => {
           onKeyDown={({ key }) => {
             if (key === "Enter") {
               handleSendMessage();
-              setInputMessage("");
             }
           }}
           type="text"
