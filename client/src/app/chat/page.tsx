@@ -39,7 +39,7 @@ const Chatpage = () => {
       } catch (error: any) {
         console.error(error.message || error);
         errorToast("Failed to fetch user details");
-        router.push("/");
+        router.push("/auth/login");
       }
     };
 
