@@ -174,9 +174,6 @@ const ChatBox = ({ isUser, payload }: { isUser: boolean; payload: MessagePayload
       {/* Header with username and time */}
       <div className="chat-header flex items-center gap-2">
         <span className="font-semibold">{payload.username}</span>
-        <time className="text-xs opacity-50">
-          {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-        </time>
       </div>
 
       {/* Message bubble */}
