@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/myComponents/Navbar";
+import Navbar, { shrikhand } from "@/myComponents/Navbar";
 
 import { Comic_Relief } from "next/font/google";
 import CheckAuth from "@/myComponents/hoc/CheckAuth";
@@ -71,9 +71,9 @@ export default function RootLayout({
             gtag('config', 'G-MPXQSDP7VZ');
           `}
       </Script>
-      <body className={`${comicRelif.className} scroll-smooth overflow-x-hidden`}>
+      <body className={`${comicRelif.className} scroll-smooth overflow-x-hidden min-h-screen flex flex-col`}>
         <Toaster position="bottom-center" toastOptions={{ duration: 3000 }} />
-        <main>
+        <main className="">
           <CheckAuth>
             <Navbar />
             {children}

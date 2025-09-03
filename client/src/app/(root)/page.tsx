@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 import { AxiosResponse } from "axios";
 import { errorToast } from "@/servies/toast";
 
+import Footer from "@/myComponents/Footer";
+
 const Rootpage = () => {
   const [confessions, setConfessions] = useState<Confession[] | null>(null);
 
@@ -41,7 +43,7 @@ const Rootpage = () => {
   }, [active, skip]);
 
   return (
-    <section className="w-screen h-screen flex flex-col gap-y-2 justify-start items-center mt-5 px-2">
+    <section className="w-screen min-h-screen flex flex-col gap-y-2 justify-start items-center mt-5 px-2">
       {/* Filter */}
       <div className="flex items-center justify-around gap-4 px-4 py-2 border-b md:w-[80%] mb-5">
         <motion.button
@@ -120,6 +122,9 @@ const Rootpage = () => {
           Next
         </button>
       </div>
+
+      {/* FOOTER  */}
+      <Footer />
     </section>
   );
 };

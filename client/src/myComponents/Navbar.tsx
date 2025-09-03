@@ -7,7 +7,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 
 import { useRouter } from "next/navigation";
 
-const shrikhand = Shrikhand({
+export const shrikhand = Shrikhand({
   weight: ["400"],
   subsets: ["latin"],
 });

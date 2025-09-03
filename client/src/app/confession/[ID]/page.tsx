@@ -58,11 +58,11 @@ const ReadConfessionpage = () => {
         setData(res.data.confession);
       } catch (error: any) {
         if (error instanceof ZodError) {
-          errorToast("invalid confession id")
+          errorToast("invalid confession id");
           return;
         }
 
-        errorToast(error.message || "Unable to perform this action")
+        errorToast(error.message || "Unable to perform this action");
         console.error(error);
       }
     };
@@ -70,7 +70,7 @@ const ReadConfessionpage = () => {
   }, [params]);
   return (
     data && (
-      <section className="w-screen px-5 md:px-0 mt-5 overflow-x-hidden flex flex-col justify-center items-center">
+      <section className="w-screen px-5 md:px-0 mt-5 overflow-x-hidden flex flex-col items-center">
         <ConfessionCard data={data} />
         <CommentInput confessionID={data._id} getNewComment={handleNewComment} />
         <div className="space-y-3 w-full flex flex-col mt-5 items-center justify-center">
@@ -110,7 +110,6 @@ const ConfessionCard = ({ data }: { data: Confession }) => {
       }
     } catch (error: any) {
       console.log(error);
-      
     }
   };
   const handleDislike = async () => {
@@ -144,7 +143,7 @@ const ConfessionCard = ({ data }: { data: Confession }) => {
 
       {/* Title */}
       <div className="px-4">
-        <h2 className="text-base text-sm md:text-xl font-semibold border-b ">{data.title}</h2>
+        <h2 className="text-base md:text-xl font-semibold border-b ">{data.title}</h2>
       </div>
       {/* Content */}
       <div className="px-4 pb-2 mt-4">
