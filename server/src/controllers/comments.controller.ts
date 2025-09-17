@@ -10,9 +10,12 @@ import { Comment } from "../models/comments.model";
 import { Confession } from "../models/confessions.model";
 import { User } from "../models/user.model";
 import z from "zod";
-import type { Types } from "mongoose";
 
 const writeCommentController = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  if (process.env.TURNOFF!) {
+    throw new ApiError(UNAUTHORIZED, "not accepting any more writes, due to moderation reasons");
+  }
+
   const { message } = commentSchema.parse(req.body);
 
   if (!req.user || !req.user.userID) throw new ApiError(UNAUTHORIZED, "unauthorized to perform this action");

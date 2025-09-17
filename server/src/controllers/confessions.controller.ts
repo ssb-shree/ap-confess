@@ -10,6 +10,9 @@ import { User } from "../models/user.model";
 import { isSpam } from "../utils/spam";
 
 const writeConfession = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  if (process.env.TURNOFF!) {
+    throw new ApiError(UNAUTHORIZED, "not accepting any more writes, due to moderation reasons");
+  }
   // get the confession data
   const { title, body, categories } = writeSchema.parse(req.body);
 
